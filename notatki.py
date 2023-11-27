@@ -1,22 +1,5 @@
-# from dane import users_list
-#
-#
-# def update_user(users_list: list[dict, dict]) -> None:
-#     nick_of_user = input("Podaj nick użytkownika do modyfikacji:")
-#     print(nick_of_user)
-#     for user in users_list:
-#         if user ["nick"] == nick_of_user:
-#             print("Znaleziono !!!")
-#             user['name']= input("Podaj nowe imię: ")
-#             user['nick'] = input("Podaj nowA ksywkę: ")
-#             user['posts'] = int(input("Podaj liczbę postów: "))
-#
-#
-# update_user(users_list)
-# for user in users_list:
-#     print(user)
-
 from bs4 import BeautifulSoup
+from dane import users_list
 import requests
 import re
 import folium
@@ -37,13 +20,37 @@ def get_coordinates(nazwa_miejscowosci:str)->list[float, float]:
     response_html_longitude=float(response_html_longitude.replace(',','.'))
 
     return [response_html_latitude, response_html_longitude]
-# for item in cities:
-#     print(get_coordinates(item))
+for item in cities:
+    print(get_coordinates(item))
+
+user={'city': 'Gdańsk', "name": "Marek", "nick": "mmmmm", "posts": 251}
 
 ### Rysowanie mapy
-city=get_coordinates(nazwa_miejscowosci='Mały_Płock')
-map=folium.Map(location=city, tiles='OpenStreetMap', zoom_start=15)
-
-for item in cities:
-    folium.Marker(location=get_coordinates(nazwa_miejscowosci=item), popup='GEOINF').add_to(map)
-map.save('mapka.html')
+def get_map_one_user(user: str) -> None:
+    city = get_coordinates(user['city'])
+    map = folium.Map(
+        location=city,
+        tiles="OpenStreetMap",
+        zoom_start=15,
+    )
+    folium.Marker(
+        location=city,
+        popup=f'Tu rządzi: {user["name"]},'              
+              f'postów: {user["posts"]} '
+    ).add_to(map)
+    map.save(f'mapka_{user["name"]}.html')
+def get_map_of(users: list[dict,dict]) -> None:
+    map = folium.Map(
+        location=[52.3, 21.0],
+        tiles="OpenStreetMap",
+        zoom_start=7,
+    )
+    for user in users:
+        folium.Marker(
+            location=get_coordinates(
+                city=user['city']),
+                popup=f'Użytkownik: {user["name"]} \n'                 
+                      f'Liczba postów {user["posts"]}'
+        ).add_to(map)
+        map.save('mapka.html')
+get_map_of(user)
