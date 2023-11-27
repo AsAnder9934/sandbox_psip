@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_c5536137ff7a600a914c3dc1e6846450 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_c5536137ff7a600a914c3dc1e6846450" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_c5536137ff7a600a914c3dc1e6846450 = L.map(
+                "map_c5536137ff7a600a914c3dc1e6846450",
+                {
+                    center: [54.3475, 18.645278],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 15,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_30ef6e15a28dc9ef051d367d80846ca4 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+                tile_layer_30ef6e15a28dc9ef051d367d80846ca4.addTo(map_c5536137ff7a600a914c3dc1e6846450);
+    
+            var marker_87039d2898ab59c31fdff17a1db584ae = L.marker(
+                [50.720556, 23.258611],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_40b4f980c3c609c2024d0519081ff929 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_48d3e7e7a0383e74bedb320162c077fc = $(`<div id="html_48d3e7e7a0383e74bedb320162c077fc" style="width: 100.0%; height: 100.0%;">Użytkownik: Maciek   Liczba postów 1</div>`)[0];
+                popup_40b4f980c3c609c2024d0519081ff929.setContent(html_48d3e7e7a0383e74bedb320162c077fc);
+            
+        
+
+        marker_87039d2898ab59c31fdff17a1db584ae.bindPopup(popup_40b4f980c3c609c2024d0519081ff929)
+        ;
+
+        
+    
+    
+            var marker_bbfe9aed0466766d786170cb8f36f5bc = L.marker(
+                [51.377222, 20.286944],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_24ca1b94a32ff53c5e7079f804b0173b = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b9b11408390edf73c87288b833359590 = $(`<div id="html_b9b11408390edf73c87288b833359590" style="width: 100.0%; height: 100.0%;">Użytkownik: Mateusz   Liczba postów 60</div>`)[0];
+                popup_24ca1b94a32ff53c5e7079f804b0173b.setContent(html_b9b11408390edf73c87288b833359590);
+            
+        
+
+        marker_bbfe9aed0466766d786170cb8f36f5bc.bindPopup(popup_24ca1b94a32ff53c5e7079f804b0173b)
+        ;
+
+        
+    
+    
+            var marker_1ef0ebf815b89e464d616f1b5026df32 = L.marker(
+                [53.305833, 22.030833],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_77d7df7af9ee181900b83fe99188e0a6 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_65b3eab19585dd20903cb0a74f0f30c6 = $(`<div id="html_65b3eab19585dd20903cb0a74f0f30c6" style="width: 100.0%; height: 100.0%;">Użytkownik: Bartosz   Liczba postów 1156</div>`)[0];
+                popup_77d7df7af9ee181900b83fe99188e0a6.setContent(html_65b3eab19585dd20903cb0a74f0f30c6);
+            
+        
+
+        marker_1ef0ebf815b89e464d616f1b5026df32.bindPopup(popup_77d7df7af9ee181900b83fe99188e0a6)
+        ;
+
+        
+    
+    
+            var marker_3248f057638b86af33af7ba0cba755ba = L.marker(
+                [53.259722, 19.395556],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_0a2e35a093ef0c7c9885b3da5edb2cf4 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_5d0ea07d9efda5e726d14c70d0c15f2b = $(`<div id="html_5d0ea07d9efda5e726d14c70d0c15f2b" style="width: 100.0%; height: 100.0%;">Użytkownik: Tomasz   Liczba postów 0</div>`)[0];
+                popup_0a2e35a093ef0c7c9885b3da5edb2cf4.setContent(html_5d0ea07d9efda5e726d14c70d0c15f2b);
+            
+        
+
+        marker_3248f057638b86af33af7ba0cba755ba.bindPopup(popup_0a2e35a093ef0c7c9885b3da5edb2cf4)
+        ;
+
+        
+    
+    
+            var marker_e9325cc0c1afe692ce070e2db7d7c233 = L.marker(
+                [54.04, 21.758889],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_4bb464d891e962773a0bc23f32c4f630 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_186fc6cc578f597beabda47b4ebe27ae = $(`<div id="html_186fc6cc578f597beabda47b4ebe27ae" style="width: 100.0%; height: 100.0%;">Użytkownik: Marek   Liczba postów 415</div>`)[0];
+                popup_4bb464d891e962773a0bc23f32c4f630.setContent(html_186fc6cc578f597beabda47b4ebe27ae);
+            
+        
+
+        marker_e9325cc0c1afe692ce070e2db7d7c233.bindPopup(popup_4bb464d891e962773a0bc23f32c4f630)
+        ;
+
+        
+    
+    
+            var marker_fa787eb54ee76c5b3a09515c0228e205 = L.marker(
+                [52.232222, 21.008333],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_a0f3697b3f54dff4a3ec0a7ff738365b = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_aa008fa909cb3c23fd97f9e441107e0f = $(`<div id="html_aa008fa909cb3c23fd97f9e441107e0f" style="width: 100.0%; height: 100.0%;">Użytkownik: Wojtek   Liczba postów 5</div>`)[0];
+                popup_a0f3697b3f54dff4a3ec0a7ff738365b.setContent(html_aa008fa909cb3c23fd97f9e441107e0f);
+            
+        
+
+        marker_fa787eb54ee76c5b3a09515c0228e205.bindPopup(popup_a0f3697b3f54dff4a3ec0a7ff738365b)
+        ;
+
+        
+    
+    
+            var marker_31101426f7edb79859722bdd0e7bbd18 = L.marker(
+                [54.190278, 16.181667],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_0f7d34538785078128b0f3fcd9096734 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ec237556c5f6883baf0cef1ac087f647 = $(`<div id="html_ec237556c5f6883baf0cef1ac087f647" style="width: 100.0%; height: 100.0%;">Użytkownik: Stasiek   Liczba postów 44</div>`)[0];
+                popup_0f7d34538785078128b0f3fcd9096734.setContent(html_ec237556c5f6883baf0cef1ac087f647);
+            
+        
+
+        marker_31101426f7edb79859722bdd0e7bbd18.bindPopup(popup_0f7d34538785078128b0f3fcd9096734)
+        ;
+
+        
+    
+    
+            var marker_bd20be622d893d5161370cba858a1828 = L.marker(
+                [50.8025, 23.891944],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_a9f7964ff8ee24ccebe68c549f3cc915 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b887c22dbf506cb59810e85882b4c4c7 = $(`<div id="html_b887c22dbf506cb59810e85882b4c4c7" style="width: 100.0%; height: 100.0%;">Użytkownik: Szymon   Liczba postów 11</div>`)[0];
+                popup_a9f7964ff8ee24ccebe68c549f3cc915.setContent(html_b887c22dbf506cb59810e85882b4c4c7);
+            
+        
+
+        marker_bd20be622d893d5161370cba858a1828.bindPopup(popup_a9f7964ff8ee24ccebe68c549f3cc915)
+        ;
+
+        
+    
+    
+            var marker_43e204c4dbd5214528892173e1a49f2e = L.marker(
+                [53.176389, 22.073056],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_a8a46f7b8bc1b750b2415e337a42d543 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_06af3e9e29a5b9182987b55a6ca316fe = $(`<div id="html_06af3e9e29a5b9182987b55a6ca316fe" style="width: 100.0%; height: 100.0%;">Użytkownik: Oliver   Liczba postów 252</div>`)[0];
+                popup_a8a46f7b8bc1b750b2415e337a42d543.setContent(html_06af3e9e29a5b9182987b55a6ca316fe);
+            
+        
+
+        marker_43e204c4dbd5214528892173e1a49f2e.bindPopup(popup_a8a46f7b8bc1b750b2415e337a42d543)
+        ;
+
+        
+    
+    
+            var marker_305e14926b05132d5cf5528a2d99e9be = L.marker(
+                [53.410556, 21.933889],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_7138a590a2560c2ca00d94a937e927ac = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_2289310e325e78f80536f79afe4dc87e = $(`<div id="html_2289310e325e78f80536f79afe4dc87e" style="width: 100.0%; height: 100.0%;">Użytkownik: Agata   Liczba postów 251</div>`)[0];
+                popup_7138a590a2560c2ca00d94a937e927ac.setContent(html_2289310e325e78f80536f79afe4dc87e);
+            
+        
+
+        marker_305e14926b05132d5cf5528a2d99e9be.bindPopup(popup_7138a590a2560c2ca00d94a937e927ac)
+        ;
+
+        
+    
+    
+            var marker_e5172ead1ba3facf35fe255025eda763 = L.marker(
+                [54.3475, 18.645278],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_9aa391c51c677de726ec3da0d87f053d = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_a5e43955ef340613d28c9dfde956e148 = $(`<div id="html_a5e43955ef340613d28c9dfde956e148" style="width: 100.0%; height: 100.0%;">Użytkownik: Marek   Liczba postów 251</div>`)[0];
+                popup_9aa391c51c677de726ec3da0d87f053d.setContent(html_a5e43955ef340613d28c9dfde956e148);
+            
+        
+
+        marker_e5172ead1ba3facf35fe255025eda763.bindPopup(popup_9aa391c51c677de726ec3da0d87f053d)
+        ;
+
+        
+    
+    
+            var marker_6fbe39d057a23b6c5147d1812d8ffcc3 = L.marker(
+                [54.3475, 18.645278],
+                {}
+            ).addTo(map_c5536137ff7a600a914c3dc1e6846450);
+        
+    
+        var popup_081c5a6f41e209439dc915ba3c751332 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_c585bb96c2de3a43fddf1e64d8e554cd = $(`<div id="html_c585bb96c2de3a43fddf1e64d8e554cd" style="width: 100.0%; height: 100.0%;">Tu rządzi Marek z geoinformatyki</div>`)[0];
+                popup_081c5a6f41e209439dc915ba3c751332.setContent(html_c585bb96c2de3a43fddf1e64d8e554cd);
+            
+        
+
+        marker_6fbe39d057a23b6c5147d1812d8ffcc3.bindPopup(popup_081c5a6f41e209439dc915ba3c751332)
+        ;
+
+        
+    
+</script>
+</html>
