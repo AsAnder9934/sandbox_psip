@@ -19,6 +19,8 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+import folium
+
 cities=['Mały_Płock', 'Warszawa']
 #pobranie strony interetowej
 def get_coordinates(nazwa_miejscowosci:str)->list[float, float]:
@@ -28,12 +30,20 @@ def get_coordinates(nazwa_miejscowosci:str)->list[float, float]:
 
     #pobieranie współrzędnych
     response_html_latitude=response_html.select('.latitude')[1].text    # . ponieważ to oznacza class
-    #latitude=re.sub('(\<).*?(\>)', repl='', string=response_html_latitude, count=0, flags=0)      z biblioteki   re
+    #latitude=re.sub('(\<).*?(\>)', repl='', string=response_html_latitude, count=0, flags=0)      z biblioteki   re jakieś gówno które nie idzie zamiast tego .text
     response_html_latitude=float(response_html_latitude.replace(',','.'))
 
     response_html_longitude=response_html.select('.longitude')[1].text
     response_html_longitude=float(response_html_longitude.replace(',','.'))
 
     return [response_html_latitude, response_html_longitude]
+# for item in cities:
+#     print(get_coordinates(item))
+
+### Rysowanie mapy
+city=get_coordinates(nazwa_miejscowosci='Mały_Płock')
+map=folium.Map(location=city, tiles='OpenStreetMap', zoom_start=15)
+
 for item in cities:
-    print(get_coordinates(item))
+    folium.Marker(location=get_coordinates(nazwa_miejscowosci=item), popup='GEOINF').add_to(map)
+map.save('mapka.html')
