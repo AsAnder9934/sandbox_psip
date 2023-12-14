@@ -1,14 +1,15 @@
 import random
-
 from faker import Faker
 from random import uniform
 import os
 import sqlalchemy, sqlalchemy.orm, sqlalchemy.orm.session
 from dotenv import load_dotenv
-import geoalchemy2
+from .dml import User
+
+
 load_dotenv()
 
-db_params=sqlalchemy.URL.create(
+db_params = sqlalchemy.URL.create(
     drivername='postgresql+psycopg2',
     username=os.getenv('POSTGRES_USER'),
     password=os.getenv('POSTGRES_PASSWORD'),
@@ -17,24 +18,13 @@ db_params=sqlalchemy.URL.create(
     port=os.getenv('POSTGRES_PORT')
 )
 
-engine=sqlalchemy.create_engine(db_params)
-connection=engine.connect()
-base=sqlalchemy.orm.declarative_base()
-
-class User(base):
-    __tablename__='mm_table'
-
-    id=sqlalchemy.Column(sqlalchemy.Integer(),primary_key=True) #typ serial (sam będzie odliczał)
-    name=sqlalchemy.Column(sqlalchemy.String(100), nullable=True)
-    location=sqlalchemy.Column('geom', geoalchemy2.Geometry(geometry_type='POINT',srid=4326),nullable=True)
-
-
-base.metadata.create_all(engine)
+engine = sqlalchemy.create_engine(db_params)
+connection = engine.connect()
 
 ########################################################CREATE/insert
 
-Session=sqlalchemy.orm.sessionmaker(bind=engine)
-session=Session()
+Session = sqlalchemy.orm.sessionmaker(bind=engine)
+session = Session()
 #
 # lista_userow:list=[]
 #
@@ -49,15 +39,15 @@ session=Session()
 # session.commit()
 ##############################################################################READ/select
 
-users_from_db=session.query(User).all()
+users_from_db = session.query(User).all()
 # users_from_db=session.query(User).filter(User.name=='')
 for user in users_from_db:
-    if user.name=="Amy Long":
-        user.name="John Weak"
+    if user.name == "Amy Long":
+        user.name = "John Weak"
     print(user.name)
 for user in users_from_db:
-    if user.name=="John Weak":
-        user.delete()                      ########delete nie działa trzeeba to zastąpić
+    if user.name == "John Weak":
+        user.delete()  ########delete nie działa trzeeba to zastąpić
     print(user.name)
 
 session.commit()
@@ -65,3 +55,5 @@ session.commit()
 session.flush()
 connection.close()
 engine.dispose()
+
+
