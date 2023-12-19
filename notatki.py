@@ -27,7 +27,6 @@ class User(base):
     name=sqlalchemy.Column(sqlalchemy.String(100), nullable=True)
     location=sqlalchemy.Column('geom', geoalchemy2.Geometry(geometry_type='POINT',srid=4326),nullable=True)
 
-
 base.metadata.create_all(engine)
 
 ########################################################CREATE/insert
@@ -54,10 +53,10 @@ for user in users_from_db:
     if user.name=="Amy Long":
         user.name="John Weak"
     print(user.name)
-for user in users_from_db:
-    if user.name=="John Weak":
-        user.delete()                      ########delete nie działa trzeeba to zastąpić
-    print(user.name)
+# for user in users_from_db:
+#     if user.name=="John Weak":
+#         user.delete()                      ########delete nie działa trzeeba to zastąpić
+#     print(user.name)
 
 session.commit()
 

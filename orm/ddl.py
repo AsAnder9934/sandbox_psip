@@ -4,8 +4,7 @@ from random import uniform
 import os
 import sqlalchemy, sqlalchemy.orm, sqlalchemy.orm.session
 from dotenv import load_dotenv
-from .dml import User
-
+from dml import User
 
 load_dotenv()
 
@@ -47,7 +46,7 @@ for user in users_from_db:
     print(user.name)
 for user in users_from_db:
     if user.name == "John Weak":
-        user.delete()  ########delete nie działa trzeeba to zastąpić
+        session.delete(user)  ########delete nie działa trzeeba to zastąpić
     print(user.name)
 
 session.commit()
@@ -55,5 +54,3 @@ session.commit()
 session.flush()
 connection.close()
 engine.dispose()
-
-
