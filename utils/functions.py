@@ -122,6 +122,7 @@ def get_map_one_user(db)->None:
                   ).add_to(map)
     map.save(f'mapka_{user.name}.html')
 
+
 def get_map_of(db)->None:
     map = folium.Map(location=[52.3,21.0],
                      tiles='OpenStreetMap',
