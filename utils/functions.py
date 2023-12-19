@@ -5,7 +5,7 @@ from dane import users_list
 import os
 import sqlalchemy, sqlalchemy.orm, sqlalchemy.orm.session
 from dotenv import load_dotenv
-import geoalchemy2
+import geoalchemy2  #geometria
 load_dotenv()
 
 db_params=sqlalchemy.URL.create(
@@ -16,57 +16,80 @@ db_params=sqlalchemy.URL.create(
     database=os.getenv('POSTGRES_DB'),
     port=os.getenv('POSTGRES_PORT')
 )
+
 engine=sqlalchemy.create_engine(db_params)
 connection=engine.connect()
 base=sqlalchemy.orm.declarative_base()
+Session = sqlalchemy.orm.sessionmaker(bind=engine)
+session = Session()
+class User(base):
+    __tablename__='GeoZwierzyniec'
 
-def add_user_to(base) -> None:        #    .list informacja o tym że to bedzie lista       None - że nie zwróci nic
+    id=sqlalchemy.Column(sqlalchemy.Integer(),primary_key=True)                         #typ serial (sam będzie odliczał)
+    city=sqlalchemy.Column(sqlalchemy.String(100), nullable=False)
+    name=sqlalchemy.Column(sqlalchemy.String(100), nullable=False)
+    nick=sqlalchemy.Column(sqlalchemy.String(100), nullable=False)
+    posts=sqlalchemy.Column(sqlalchemy.Integer(), nullable=False)
+    # location=sqlalchemy.Column('geom', geoalchemy2.Geometry(geometry_type='POINT',srid=4326),nullable=True)
+
+base.metadata.create_all(engine)
+def add_user_to(db) -> None:                                                            #    .list informacja o tym że to bedzie lista       None - że nie zwróci nic
     """
-    add object to list
-    :param users_list: list - user list
+    add object to db
+    :param db: list - user list
     :return: None
     """
     city=input(('Podaj miasto użytkownika '))
     name=input('Podaj imię ')
     nick=input('Podaj nick ')
     posts=input('Podaj liczbę postów ')
-    add_to_db=f'INSERT INTO public.GeoZwierzyniec(city,name,nick,posts) VALUES ({city},{name},{nick},{posts})'
+    db_insert=User(city=city, name=name, nick=nick, posts=posts)
+    db.add(db_insert)
+    db.commit()
     # users_list.append({'name':name,'nick':nick, 'posts': posts})                      #STARY KOD ZWIĄZANY Z PLIKIEM DANE.PY
 
-def remove_user_from(users_list:list) -> None:
+# add_user_to(session)
+# session.close()
+def remove_user_from(session) -> None:
     """
-    remove object from list
-    :param users_list: list - users list
+    remove object from db
+    :param session: sql - session
     :return: None
     """
-    tmp_list=[]
+    # tmp_list=[]                                                                    #tymczasowa lista do starego kodu
     name=input('Podaj imię użytkownika do usunięcia: ')
-    for user in users_list:
-        if user["name"]==name:                                 #musi być nawias kwadratowy ponieważ odwołujemy się do listy
-            tmp_list.append(user)
-            #users_list.remove(user)
-    print(f'Znaleziono użytkowników: ')
-    print('0: Usuń wszystkich ')
-    for numerek, user_to_be_removed in enumerate(tmp_list):
-        print(f'{numerek+1}: {user_to_be_removed}')
-    numer=int(input(f'Wybierz użytkownika do usunięcia: ')) #wynikiem operacji inpunt jest string więc musimy zMIENIĆ go dalej na ineger
+    users_to_remove=session.query(User).filter(User.name==name)
+    if users_to_remove:                                                          #musi być nawias kwadratowy ponieważ odwołujemy się do listy
+        for num, user in enumerate(users_to_remove):
+        #users_list.remove(user)
+            print(f'Znaleziono użytkowników:\n{num+1}: {name} ')
+            print('0: Usuń wszystkich ')
+    # for numerek, user_to_removed in enumerate(users_to_remove):
+    #     print(f'{numerek+1}: {user_to_removed}')
+    numer=int(input(f'Wybierz użytkownika do usunięcia: '))                          #wynikiem operacji inpunt jest string więc musimy zMIENIĆ go dalej na ineger
     if numer == 0:
-        for user in tmp_list:
-            users_list.remove(user)
+        for user in users_to_remove:
+            session.delete(user)
     else:
-        users_list.remove(tmp_list[numer-1])
-
+        session.delete(users_to_remove[numer-1])
+    session.commit()
     #users_list.remove(tmp_list[numer-1])
+# remove_user_from(session)
 
-def show_users_from(users_list:list)->None:
-    for user in users_list:
-        print(f'Twój znajomy {user["name"]} dodał {user["posts"]} postów')
+def show_users_from(session)->None:
+    users_to_show= session.query(User)
+    if users_to_show:
+        for user in users_to_show:
+            print(f'Twój znajomy {user.name} dodał {user.posts} postów')
 
 # ==================================== MAPA
 
-def get_coordinates(city:str)->list[float,float]:
+def get_coordinates(city)->list[float,float]:
     # pobieranie strony internetowej
-    adres_url=f'https://pl.wikipedia.org/wiki/{city}'
+    users_to_get_coordinates = session.query(User)
+    if users_to_get_coordinates:
+        for user in users_to_get_coordinates:
+            adres_url=f'https://pl.wikipedia.org/wiki/{city}'
 
     response=requests.get(url=adres_url) #zwraca obiekt, wywołany jest status
     response_html=BeautifulSoup(response.text, 'html.parser') #zwraca tekst kodu strony internetowej, zapisany w html
@@ -80,28 +103,36 @@ def get_coordinates(city:str)->list[float,float]:
     response_html_long=float(response_html_long.replace(',','.'))
 
     return [response_html_lat,response_html_long]
-def get_map_one_user(user:str)->None:
-    city=get_coordinates(user['city'])
+
+
+def get_map_one_user(session)->None:
+    get_coordinates_user = session.query(User)
+    for user in get_coordinates_user:
+        city=get_coordinates(user.city)
     map = folium.Map(location=city,
                      tiles='OpenStreetMap',
                      zoom_start=14
                      )  # location to miejsce wycentrowania mapy
     folium.Marker(location=city,
-                  popup=f'Użytkownik: {user["name"]}\n'
-                  f'Liczba postow: {user['posts']}'
+                  popup=f'Użytkownik: {user.name}\n'
+                  f'Liczba postow: {user.posts}'
                   ).add_to(map)
-    map.save(f'mapka_{user['name']}.html')
-def get_map_of(users:list[dict,dict])->None:
+    map.save(f'mapka_{user.name}.html')
+
+get_map_one_user(session)
+def get_map_of(session)->None:
     map = folium.Map(location=[52.3,21.0],
                      tiles='OpenStreetMap',
                      zoom_start=7
                      )  # location to miejsce wycentrowania mapy
-    for user in users_list:
-        folium.Marker(location=get_coordinates(city=user['city']),
-                      popup=f'Użytkownik: {user["name"]}\n'
-                      f'Liczba postow: {user['posts']}'
+    for user in session.query(User):
+        city = get_coordinates(user.city)
+        folium.Marker(location=city,
+                      popup=f'Użytkownik: {user.name}\n'
+                      f'Liczba postow: {user.posts}'
                       ).add_to(map)
-        map.save('mapka.html')
+
+    map.save('mapka.html')
 def gui(users_list)->None:
     while True:
         print(f'MENU: \n'
@@ -122,25 +153,25 @@ def gui(users_list)->None:
                 break
             case '1':
                 print('Wyświetlanie listy użytkowników')
-                show_users_from(users_list)
+                show_users_from(session)
             case '2':
                 print('Dodaję użytkownika ')
-                add_user_to(users_list)
+                add_user_to(session)
             case '3':
                 print('Usuwanie użytkowników')
-                remove_user_from(users_list)
+                remove_user_from(session)
             case '4':
                 print('Modyfikuję użytkownika')
-                update_user(users_list)
+                update_user(session)
             case '5':
                 print('Rysuję mapę z użytkownikiem')
                 user = input("Podaj nazwę użytkownika do modyfikacji")
-                for item in users_list:
-                    if item['name'] == user:
-                        get_map_one_user(item)
+                for item in session.query(User):
+                    if item.name == user:
+                        get_map_one_user(session)
             case '6':
                 print('Rysuję mapę z wszystkimi użytkownikami')
-                get_map_of(users_list)
+                get_map_of(session)
 
 
 # def update_user(users_list) :
@@ -150,12 +181,14 @@ def gui(users_list)->None:
 #     pass
 
 
-def update_user(users_list: list[dict, dict]) -> None:
+def update_user(session) -> None:
     nick_of_user = input("Podaj nick użytkownika do modyfikacji:")
     print(nick_of_user)
-    for user in users_list:
-        if user ["nick"] == nick_of_user:
+    for user in session.query(User):
+        if user.nick == nick_of_user:
             print("Znaleziono !!!")
-            user['name']= input("Podaj nowe imię: ")
-            user['nick'] = input("Podaj nowA ksywkę: ")
-            user['posts'] = int(input("Podaj liczbę postów: "))
+            user.name= input("Podaj nowe imię: ")
+            user.nick = input("Podaj nową ksywkę: ")
+            user.posts= int(input("Podaj liczbę postów: "))
+            user.city= input('Podaj nową nazwę miasta: ')
+            session.commit()
