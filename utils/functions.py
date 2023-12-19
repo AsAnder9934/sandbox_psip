@@ -1,11 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
 import folium
-from dane import users_list
 import os
 import sqlalchemy, sqlalchemy.orm, sqlalchemy.orm.session
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-import geoalchemy2  #geometria
+import geoalchemy2                                                                      #geometria
 load_dotenv()
 
 db_params=sqlalchemy.URL.create(
@@ -20,8 +19,10 @@ db_params=sqlalchemy.URL.create(
 engine=sqlalchemy.create_engine(db_params)
 connection=engine.connect()
 base=sqlalchemy.orm.declarative_base()
+
 Session = sqlalchemy.orm.sessionmaker(bind=engine)
 session = Session()
+
 class User(base):
     __tablename__='GeoZwierzyniec'
 
@@ -30,59 +31,62 @@ class User(base):
     name=sqlalchemy.Column(sqlalchemy.String(100), nullable=False)
     nick=sqlalchemy.Column(sqlalchemy.String(100), nullable=False)
     posts=sqlalchemy.Column(sqlalchemy.Integer(), nullable=False)
-    # location=sqlalchemy.Column('geom', geoalchemy2.Geometry(geometry_type='POINT',srid=4326),nullable=True)
 
 base.metadata.create_all(engine)
+
 def add_user_to(db) -> None:                                                            #    .list informacja o tym że to bedzie lista       None - że nie zwróci nic
     """
     add object to db
     :param db: list - user list
     :return: None
     """
-    city=input(('Podaj miasto użytkownika '))
-    name=input('Podaj imię ')
-    nick=input('Podaj nick ')
-    posts=input('Podaj liczbę postów ')
+    city=input(('Podaj miasto użytkownika: '))
+    name=input('Podaj imię: ')
+    nick=input('Podaj nick: ')
+    posts=input('Podaj liczbę postów: ')
     db_insert=User(city=city, name=name, nick=nick, posts=posts)
     db.add(db_insert)
     db.commit()
-    # users_list.append({'name':name,'nick':nick, 'posts': posts})                      #STARY KOD ZWIĄZANY Z PLIKIEM DANE.PY
 
-# add_user_to(session)
-# session.close()
-def remove_user_from(session) -> None:
+def remove_user_from(db) -> None:
     """
     remove object from db
-    :param session: sql - session
+    :param db: sql - db
     :return: None
     """
-    # tmp_list=[]                                                                    #tymczasowa lista do starego kodu
     name=input('Podaj imię użytkownika do usunięcia: ')
     users_to_remove=session.query(User).filter(User.name==name)
-    if users_to_remove:                                                          #musi być nawias kwadratowy ponieważ odwołujemy się do listy
+    if users_to_remove:                                                                #musi być nawias kwadratowy ponieważ odwołujemy się do listy
         for num, user in enumerate(users_to_remove):
-        #users_list.remove(user)
-            print(f'Znaleziono użytkowników:\n{num+1}: {name} ')
+            print(f'Znaleziono użytkowników: \n{num+1}: {name} ')
             print('0: Usuń wszystkich ')
-    # for numerek, user_to_removed in enumerate(users_to_remove):
-    #     print(f'{numerek+1}: {user_to_removed}')
-    numer=int(input(f'Wybierz użytkownika do usunięcia: '))                          #wynikiem operacji inpunt jest string więc musimy zMIENIĆ go dalej na ineger
+    numer=int(input(f'Wybierz użytkownika do usunięcia: '))
     if numer == 0:
         for user in users_to_remove:
             session.delete(user)
     else:
         session.delete(users_to_remove[numer-1])
     session.commit()
-    #users_list.remove(tmp_list[numer-1])
-# remove_user_from(session)
 
-def show_users_from(session)->None:
+def show_users_from(db)->None:
     users_to_show= session.query(User)
     if users_to_show:
         for user in users_to_show:
-            print(f'Twój znajomy {user.name} dodał {user.posts} postów')
+            print(f'Twój znajomy {user.name} dodał {user.posts} postów ')
 
-# ==================================== MAPA
+def update_user(db) -> None:
+    nick_of_user = input("Podaj nick użytkownika do modyfikacji: ")
+    print(nick_of_user)
+    for user in session.query(User):
+        if user.nick == nick_of_user:
+            print("Znaleziono !!!")
+            user.name= input("Podaj nowe imię: ")
+            user.nick = input("Podaj nową ksywkę: ")
+            user.posts= int(input("Podaj liczbę postów: "))
+            user.city= input('Podaj nową nazwę miasta: ')
+            session.commit()
+
+# ===========================================================MAPA=======================================================
 
 def get_coordinates(city)->list[float,float]:
     # pobieranie strony internetowej
@@ -92,10 +96,10 @@ def get_coordinates(city)->list[float,float]:
             adres_url=f'https://pl.wikipedia.org/wiki/{city}'
 
     response=requests.get(url=adres_url) #zwraca obiekt, wywołany jest status
-    response_html=BeautifulSoup(response.text, 'html.parser') #zwraca tekst kodu strony internetowej, zapisany w html
+    response_html=BeautifulSoup(response.text, 'html.parser')                   #zwraca tekst kodu strony internetowej, zapisany w html
 
     #pobieranie współrzędnych
-    response_html_lat=response_html.select('.latitude')[1].text #kropka oznacza klasę, do ID odwołujemy sie przez #
+    response_html_lat=response_html.select('.latitude')[1].text                         #kropka oznacza klasę, do ID odwołujemy sie przez #
     # latitude=re.sub('(\<).*?(\>)', repl='', string=response_html_latitude, count=0, flags=0)      z biblioteki   re jakieś gówno które nie idzie zamiast tego .text
     response_html_lat=float(response_html_lat.replace(',','.'))
 
@@ -104,8 +108,7 @@ def get_coordinates(city)->list[float,float]:
 
     return [response_html_lat,response_html_long]
 
-
-def get_map_one_user(session)->None:
+def get_map_one_user(db)->None:
     get_coordinates_user = session.query(User)
     for user in get_coordinates_user:
         city=get_coordinates(user.city)
@@ -119,7 +122,8 @@ def get_map_one_user(session)->None:
                   ).add_to(map)
     map.save(f'mapka_{user.name}.html')
 
-def get_map_of(session)->None:
+
+def get_map_of(db)->None:
     map = folium.Map(location=[52.3,21.0],
                      tiles='OpenStreetMap',
                      zoom_start=7
@@ -132,7 +136,8 @@ def get_map_of(session)->None:
                       ).add_to(map)
 
     map.save('mapka.html')
-def gui(users_list)->None:
+#==========================================================GUI==========================================================
+def gui(db)->None:
     while True:
         print(f'MENU: \n'
               f'0. Zakończ program\n'
@@ -171,23 +176,3 @@ def gui(users_list)->None:
             case '6':
                 print('Rysuję mapę z wszystkimi użytkownikami')
                 get_map_of(session)
-
-
-# def update_user(users_list) :
-#     nick_of_user = input("")
-#     for user in users_list:
-#         if user['nick'] == nick
-#     pass
-
-
-def update_user(session) -> None:
-    nick_of_user = input("Podaj nick użytkownika do modyfikacji:")
-    print(nick_of_user)
-    for user in session.query(User):
-        if user.nick == nick_of_user:
-            print("Znaleziono !!!")
-            user.name= input("Podaj nowe imię: ")
-            user.nick = input("Podaj nową ksywkę: ")
-            user.posts= int(input("Podaj liczbę postów: "))
-            user.city= input('Podaj nową nazwę miasta: ')
-            session.commit()
