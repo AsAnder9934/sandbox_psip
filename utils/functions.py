@@ -15,7 +15,6 @@ db_params=sqlalchemy.URL.create(
     database=os.getenv('POSTGRES_DB'),
     port=os.getenv('POSTGRES_PORT')
 )
-
 engine=sqlalchemy.create_engine(db_params)
 connection=engine.connect()
 base=sqlalchemy.orm.declarative_base()
@@ -100,7 +99,7 @@ def get_coordinates(city)->list[float,float]:
 
     #pobieranie współrzędnych
     response_html_lat=response_html.select('.latitude')[1].text                         #kropka oznacza klasę, do ID odwołujemy sie przez #
-    # latitude=re.sub('(\<).*?(\>)', repl='', string=response_html_latitude, count=0, flags=0)      z biblioteki   re jakieś gówno które nie idzie zamiast tego .text
+    # latitude=re.sub('(\<).*?(\>)', repl='', string=response_html_latitude, count=0, flags=0)      z biblioteki   re jakieś g które nie idzie zamiast tego .text
     response_html_lat=float(response_html_lat.replace(',','.'))
 
     response_html_long=response_html.select('.longitude')[1].text #kropka oznacza klasę, do ID odwołujemy sie przez #
@@ -121,7 +120,6 @@ def get_map_one_user(db)->None:
                   f'Liczba postow: {user.posts}'
                   ).add_to(map)
     map.save(f'mapka_{user.name}.html')
-
 
 def get_map_of(db)->None:
     map = folium.Map(location=[52.3,21.0],
