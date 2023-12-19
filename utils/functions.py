@@ -36,7 +36,7 @@ base.metadata.create_all(engine)
 def add_user_to(db) -> None:                                                            #    .list informacja o tym że to bedzie lista       None - że nie zwróci nic
     """
     add object to db
-    :param db: list - user list
+    :param db: sql db
     :return: None
     """
     city=input(('Podaj miasto użytkownika: '))
@@ -107,10 +107,14 @@ def get_coordinates(city)->list[float,float]:
 
     return [response_html_lat,response_html_long]
 
-def get_map_one_user(db)->None:
-    get_coordinates_user = session.query(User)
-    for user in get_coordinates_user:
-        city=get_coordinates(user.city)
+def get_map_one_user(name)->None:
+    user = session.query(User).filter(User.name==name).first()
+
+
+    city = get_coordinates(user.city)
+    # for user in get_coordinates_user:
+
+
     map = folium.Map(location=city,
                      tiles='OpenStreetMap',
                      zoom_start=14
@@ -146,31 +150,29 @@ def gui(db)->None:
               f'5: Wygeneruj mapę z użytkownikiem \n'
               f'6: Wygeneruj mapę z wszystkimi użytkownikami'
               )
-        menu_opction=input('Podaj funkcję do wywołania ')
-        print(f'wybrano funkcję{menu_opction}')
+        menu_opction=input('Podaj funkcję do wywołania: ')
+        print(f'wybrano funkcję {menu_opction}')
 
         match menu_opction:
             case '0':
-                print('Kończę pracę ')
+                print('Kończę pracę. ')
                 break
             case '1':
-                print('Wyświetlanie listy użytkowników')
+                print('Wyświetlanie listy użytkowników: ')
                 show_users_from(session)
             case '2':
-                print('Dodaję użytkownika ')
+                print('Dodaję użytkownika: ')
                 add_user_to(session)
             case '3':
-                print('Usuwanie użytkowników')
+                print('Usuwanie użytkowników: ')
                 remove_user_from(session)
             case '4':
-                print('Modyfikuję użytkownika')
+                print('Modyfikuję użytkownika: ')
                 update_user(session)
             case '5':
-                print('Rysuję mapę z użytkownikiem')
-                user = input("Podaj nazwę użytkownika do modyfikacji")
-                for item in session.query(User):
-                    if item.name == user:
-                        get_map_one_user(session)
+                print('Rysuję mapę z użytkownikiem. ')
+                user = input("Podaj nazwę użytkownika do wygenerowania mapy: ")
+                get_map_one_user(user)
             case '6':
-                print('Rysuję mapę z wszystkimi użytkownikami')
+                print('Rysuję mapę z wszystkimi użytkownikami. ')
                 get_map_of(session)
