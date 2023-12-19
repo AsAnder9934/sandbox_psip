@@ -2,18 +2,36 @@ import requests
 from bs4 import BeautifulSoup
 import folium
 from dane import users_list
+import os
+import sqlalchemy, sqlalchemy.orm, sqlalchemy.orm.session
+from dotenv import load_dotenv
+import geoalchemy2
+load_dotenv()
 
-def add_user_to(users_list:list) -> None:        #    .list informacja o tym że to bedzize lista       None - że nie zwróci nic
+db_params=sqlalchemy.URL.create(
+    drivername='postgresql+psycopg2',
+    username=os.getenv('POSTGRES_USER'),
+    password=os.getenv('POSTGRES_PASSWORD'),
+    host=os.getenv('POSTGRES_HOST'),
+    database=os.getenv('POSTGRES_DB'),
+    port=os.getenv('POSTGRES_PORT')
+)
+engine=sqlalchemy.create_engine(db_params)
+connection=engine.connect()
+base=sqlalchemy.orm.declarative_base()
+
+def add_user_to(base) -> None:        #    .list informacja o tym że to bedzie lista       None - że nie zwróci nic
     """
     add object to list
     :param users_list: list - user list
     :return: None
     """
-
-    name=input('Podaj imię')
-    nick=input('Podaj nick')
-    posts=input('Podaj liczbę postów')
-    users_list.append({'name':name,'nick':nick, 'posts': posts})
+    city=input(('Podaj miasto użytkownika '))
+    name=input('Podaj imię ')
+    nick=input('Podaj nick ')
+    posts=input('Podaj liczbę postów ')
+    add_to_db=f'INSERT INTO public.GeoZwierzyniec(city,name,nick,posts) VALUES ({city},{name},{nick},{posts})'
+    # users_list.append({'name':name,'nick':nick, 'posts': posts})                      #STARY KOD ZWIĄZANY Z PLIKIEM DANE.PY
 
 def remove_user_from(users_list:list) -> None:
     """
