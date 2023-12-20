@@ -10,5 +10,4 @@ users_list: list = [
     {'city': 'Łomża', "name": "Oliver", "nick": "Oli", "posts": 252},
     {'city': 'Kolno', "name": "Agata", "nick": "AAa", "posts": 251},
     {'city': 'Gdańsk', "name": "Marek", "nick": "mmmmm", "posts": 251}
-
 ]

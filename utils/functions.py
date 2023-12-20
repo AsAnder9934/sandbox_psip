@@ -139,7 +139,7 @@ def get_map_of(db)->None:
 
     map.save('mapka.html')
 #==========================================================GUI==========================================================
-def gui(db)->None:
+def gui()->None:
     while True:
         print(f'MENU: \n'
               f'0. Zakończ program\n'
